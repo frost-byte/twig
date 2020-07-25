@@ -67,7 +67,8 @@ $twig->display('view.html', []);
 ```
 
 ### Macros
-If organize a collection of macros into in one file, this method allows you to call an individual macro and use the result within your app.
+    If organize a collection of macros into in one file, this method allows you to call an individual macro and
+    use the result within your app.
 
 
 #### Template - **macros.html.twig**
@@ -88,19 +89,38 @@ $result = $twig->renderTemplateMacro(
 ```
 
 ### Caching in Google Cloud Storage
-When running your application as a flexible or standard app in Google App Engine, one option for caching files is to use a Google Cloud Storage Bucket. (You would typically have limited access/resources for altering local files, once the app is deployed. Another option would be to pre-generate
-your template cache and deploy it with your app.)
 
-This integration provides an implementation of a Twig `CacheInterface`.
-Set the following values in the config to enable the Cloud Storage cache:
+    When running your application as a flexible or standard app in Google App Engine, one option for caching files is to use a Google Cloud Storage Bucket. (You would typically have limited access/resources for altering local files, once the app is deployed.
+
+    Another option would be to pre-generate your template cache and deploy it with your app.)
+
+    This integration provides an implementation of a Twig CacheInterface.
+
+    Set the following values in the config to enable the Cloud Storage cache:
 ```php
-    public $useCloudCache = true;
+public $useCloudCache = true;
 
-    public $bucket = [
-        'name' => 'your-gcs-bucket-name',
-        'directory' => 'directory-in-your-bucket'
-    ];
+public $bucket = [
+    'name' => 'your-gcs-bucket-name',
+    'directory' => 'directory-in-your-bucket'
+];
 ```
+
+### Service Account Authentication
+    This integration can use the path to a key file containing your service account credentials by
+    setting the value in **app/Config/Twig.php**.  If you are hosting your app using Google Compute Engine
+    or Google App Engine, then the authentication is already performed, and the key file is unnecessary.
+
+```php
+public $keyFilePath = 'path/to/your/keyfile.json';
+```
+
 ## Tests
 If you used composer to add the integration to your project, then you can run its tests...
 `vendor\bin\phpunit vendor\frost-byte\twig\tests`
+
+## Notes
+
+You can learn more about authenticating your service with Google Cloud Services [here](auth).
+
+[auth]: https://github.com/googleapis/google-cloud-php/blob/master/AUTHENTICATION.md

@@ -11,6 +11,13 @@ use Google\Cloud\Storage\{
 class GoogleCloudCache implements CacheInterface
 {
     /**
+     * The path to the Service Account key file
+     *
+     * @var string
+     */
+    private $keyFilePath;
+
+    /**
      * The directory within the Bucket where files will be cached.
      *
      * @var string
@@ -35,11 +42,24 @@ class GoogleCloudCache implements CacheInterface
     public const PROTO = "gs://";
 
     /**
-     * @param string $bucketDirectory The root cache directory
-     * @param int    $options   A set of options
+     * @param string $bucketName        The cloud storage bucket name
+     * @param string $bucketDirectory   The root cache directory within the bucket
+     * @param string $keyFilePath       The path to the Google Cloud Service Account key file
+     * @param int    $options           A set of options for Twig
      */
-    public function __construct($bucketName, $bucketDirectory, $options = 0)
-    {
+    public function __construct(
+        $bucketName,
+        $bucketDirectory,
+        $keyFilePath = '',
+        $options = 0
+    ) {
+        $this->keyFilePath = $keyFilePath;
+
+        if (!empty($this->keyFilePath)) {
+            $this->storage = new StorageClient([
+                'keyFilePath' => $this->keyFilePath
+            ]);
+        }
         $this->storage = new StorageClient();
         $this->bucket = $this->storage->bucket($bucketName);
         $this->storage->registerStreamWrapper();

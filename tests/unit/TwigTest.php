@@ -6,6 +6,7 @@ use Frostbyte\Twig\Twig;
 use CodeIgniter\Test\{
     CIUnitTestCase
 };
+use Frostbyte\Twig\Cache\GoogleCloudCache;
 
 class TwigTest extends CIUnitTestCase
 {
@@ -18,9 +19,12 @@ class TwigTest extends CIUnitTestCase
 
         $this->resourcesPath = realpath(__DIR__ . '/../_resources/') . DIRECTORY_SEPARATOR;
 
-        $config = new \Frostbyte\Twig\Config\Twig();
+        $config = config('twig');
 
-        $config->paths = [$this->resourcesPath . 'Views'];
+        if (empty($config)) {
+            $config = new \Frostbyte\Twig\Config\Twig();
+            $config->paths = [$this->resourcesPath . 'Views'];
+        }
 
         $this->twig = new Twig($config);
     }
@@ -51,5 +55,19 @@ class TwigTest extends CIUnitTestCase
         $result = $this->twig->render('test-global.html');
 
         $this->assertEquals('<h1>frost-byte</h1>', $result);
+    }
+
+    public function testCloudCache()
+    {
+        if ($this->twig->getTwig()->getCache() instanceof GoogleCloudCache) {
+            $result = $this->twig->render(
+                'test-cloud.html',
+                ['name' => 'frost-byte']
+            );
+
+            $this->assertEquals('<h1>frost-byte</h1>', $result);
+        } else {
+            $this->assertEquals(true, true);
+        }
     }
 }

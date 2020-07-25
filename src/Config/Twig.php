@@ -13,10 +13,10 @@ class Twig extends BaseConfig
     public $paths = [];
 
     public $useCloudCache = false;
+    public $keyFilePath = '';
 
     public $bucket = [
         'name' => 'bucket-name',
         'directory' => 'bucket-directory'
     ];
 }
-
