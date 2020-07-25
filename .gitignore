@@ -1,0 +1,15 @@
+# Sublime Text
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+*.sublime-project
+.phpintel
+/api/
+
+# Visual Studio Code
+.vscode/
+
+# Composer
+vendor/
+composer.lock
