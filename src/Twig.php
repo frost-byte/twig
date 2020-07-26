@@ -104,15 +104,11 @@ class Twig
         }
 
         if ($config->useCloudCache) {
-            log_message(
-                'info',
-                "FrostByte\Twig->construct.useCloudCache"
-            );
             $cache = new GoogleCloudCache(
                 $config->bucket['name'],
                 $config->bucket['directory'],
-                0,
-                $config->keyFilePath
+                $config->keyFilePath,
+                $config->projectId
             );
         } else {
             $cache = WRITEPATH . 'cache' . DIRECTORY_SEPARATOR . 'twig';

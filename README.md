@@ -107,12 +107,15 @@ public $bucket = [
 ```
 
 ### Service Account Authentication
-    This integration can use the path to a key file containing your service account credentials by
-    setting the value in **app/Config/Twig.php**.  If you are hosting your app using Google Compute Engine
-    or Google App Engine, then the authentication is already performed, and the key file is unnecessary.
+
+If you are hosting your app using Google Compute Engine or Google App Engine, then the authentication is already performed, and configuring the path to the key file is unnecessary.
+
+However, when using the GoogleCloudCache outside of GCE or GAE, you can set your configuration to point to a key file containing your service account credentials and by setting your Google Cloud **projectId** in **app/Config/Twig.php**.
+
 
 ```php
 public $keyFilePath = 'path/to/your/keyfile.json';
+public $projectId = 'your-gcloud-project-id';
 ```
 
 ## Tests

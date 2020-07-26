@@ -12,10 +12,17 @@ class GoogleCloudCache implements CacheInterface
 {
     /**
      * The path to the Service Account key file
-     *
+     * (not required if app deployed to GCE or GAE)
      * @var string
      */
     private $keyFilePath;
+
+    /**
+     * The Project ID for the Service Account
+     * (not required if app deployed to GCE or GAE)
+     * @var string
+     */
+    private $projectId;
 
     /**
      * The directory within the Bucket where files will be cached.
@@ -45,22 +52,28 @@ class GoogleCloudCache implements CacheInterface
      * @param string $bucketName        The cloud storage bucket name
      * @param string $bucketDirectory   The root cache directory within the bucket
      * @param string $keyFilePath       The path to the Google Cloud Service Account key file
+     * @param string $projectId         The projectId for the Google Cloud Service Account
      * @param int    $options           A set of options for Twig
      */
     public function __construct(
         $bucketName,
         $bucketDirectory,
         $keyFilePath = '',
+        $projectId = '',
         $options = 0
     ) {
         $this->keyFilePath = $keyFilePath;
+        $this->projectId = $projectId;
 
         if (!empty($this->keyFilePath)) {
             $this->storage = new StorageClient([
-                'keyFilePath' => $this->keyFilePath
+                'keyFilePath' => $this->keyFilePath,
+                'projectId' => $this->projectId
             ]);
+        } else {
+            $this->storage = new StorageClient();
         }
-        $this->storage = new StorageClient();
+
         $this->bucket = $this->storage->bucket($bucketName);
         $this->storage->registerStreamWrapper();
         $this->bucketDirectory = rtrim($bucketDirectory, '\/') . '/';
